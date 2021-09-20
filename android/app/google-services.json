@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "339971547767",
+    "project_id": "frank-scoring",
+    "storage_bucket": "frank-scoring.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339971547767:android:d7eda42202d4c84f3c9c72",
+        "android_client_info": {
+          "package_name": "com.weegreenapps.frank_scoring"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339971547767-plhcru32mki6l59fnfjsbfo2vhm5l7k3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMd0Y3_ZsqCMFS_LSkyO2cXIU80fbjAEE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339971547767-plhcru32mki6l59fnfjsbfo2vhm5l7k3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

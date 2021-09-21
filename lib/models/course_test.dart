@@ -1,4 +1,4 @@
-class Course {
+class CourseTest {
 
   String courseName = ''; //name of course
   int courseHoles = 0; //number of holes on course
@@ -7,7 +7,7 @@ class Course {
   int holeIndex = 0; //the stroke index of the hole
   String teeType =''; //the type of tees for the data provided
 
-  Course({required this.courseName, required this.teeType, required this.courseHoles});
+  CourseTest({required this.courseName, required this.teeType, required this.courseHoles});
 
   Future<void> getCourse() async {
 

@@ -1,54 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:frank_scoring/models/player.dart';
-import 'package:frank_scoring/pages/player_pages/new_player_form.dart';
-import 'package:frank_scoring/pages/player_pages/player_list.dart';
+import 'package:frank_scoring/models/course.dart';
+import 'package:frank_scoring/pages/course_pages/courses_list.dart';
+import 'package:frank_scoring/pages/course_pages/new_course_form.dart';
 import 'package:frank_scoring/services/auth.dart';
 import 'package:frank_scoring/services/database.dart';
 import 'package:provider/provider.dart';
 
-class Players extends StatefulWidget {
+class Courses extends StatefulWidget {
   @override
-  _PlayersState createState() => _PlayersState();
+  _CoursesState createState() => _CoursesState();
 }
 
-
-class _PlayersState extends State<Players> {
+class _CoursesState extends State<Courses> {
   final AuthService _auth = AuthService();
 
-  void _showAddPlayerForm() {
+  void _showAddCourseForm() {
     showModalBottomSheet(context: context, builder: (context) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-        child: NewPlayerForm(),
+        child: NewCourseForm(),
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Player>>.value(
+    return StreamProvider<List<Course>>.value(
       initialData: [],
-      value: DatabaseService(uid: '').players,
+      value: DatabaseService(uid: '').courses,
       child: Scaffold(
         backgroundColor: Colors.green[100],
         appBar: AppBar(
           backgroundColor: Colors.green[300],
-          title: Text('Choose Player'),
+          title: Text('Choose Course'),
           elevation: 0,
           actions: <Widget>[
             TextButton.icon(
               onPressed: () {
-                _showAddPlayerForm();
+                _showAddCourseForm();
               },
               icon: Icon(Icons.person_add),
-              label: Text('Add Player'),
+              label: Text('Add Course'),
               style: TextButton.styleFrom(
                 primary: Colors.white,
               ),
             ),
           ],
         ),
-        body: PlayerList(),
+        body: CourseList(),
       ),
     );
   }

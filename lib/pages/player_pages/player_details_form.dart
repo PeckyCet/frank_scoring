@@ -3,7 +3,6 @@ import 'package:frank_scoring/models/myuser.dart';
 import 'package:frank_scoring/models/player.dart';
 import 'package:frank_scoring/services/database.dart';
 import 'package:frank_scoring/shared/constants.dart';
-import 'package:frank_scoring/shared/loading.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:provider/provider.dart';
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frank_scoring/models/myuser.dart';
+import 'package:frank_scoring/pages/course_pages/course_select.dart';
 import 'package:frank_scoring/pages/home/home.dart';
 import 'package:frank_scoring/pages/player_pages/player_select.dart';
 import 'package:frank_scoring/pages/course_pages/courses_list.dart';

@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:frank_scoring/models/course.dart';
 import 'package:frank_scoring/models/myuser.dart';
 import 'package:frank_scoring/models/player.dart';
 import 'package:frank_scoring/services/database.dart';
@@ -7,15 +9,15 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:provider/provider.dart';
 
 class PlayerDetailsForm extends StatefulWidget {
-  const PlayerDetailsForm({Key? key}) : super(key: key);
 
   @override
   _PlayerDetailsFormState createState() => _PlayerDetailsFormState();
 }
 
 class _PlayerDetailsFormState extends State<PlayerDetailsForm> {
-  final _formKey = GlobalKey<FormState>();
-  //final double _currentSliderValue = 16;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final Stream<QuerySnapshot> _playerStream =
+      FirebaseFirestore.instance.collection('players').snapshots();
 
   //form values
   late String _currentName;
@@ -25,11 +27,19 @@ class _PlayerDetailsFormState extends State<PlayerDetailsForm> {
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser?>(context);
 
-    return StreamBuilder<Player>(
-        stream: DatabaseService(uid: user!.uid).playerData,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            Player? playerData = snapshot.data;
+    return StreamBuilder<QuerySnapshot>(
+      stream: _playerStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        print(snapshot);
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+        return new ListView(
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
             return Form(
               key: _formKey,
               child: Column(
@@ -48,7 +58,7 @@ class _PlayerDetailsFormState extends State<PlayerDetailsForm> {
                     validator: (val) =>
                         val!.isEmpty ? 'Please enter a name' : null,
                     onChanged: (val) => setState(() => _currentName = val),
-                    initialValue: playerData!.playerName,
+                    initialValue: document.get('name'),
                   ),
                   SizedBox(
                     height: 15.0,
@@ -63,7 +73,8 @@ class _PlayerDetailsFormState extends State<PlayerDetailsForm> {
                   SfSlider(
                     min: 0.0,
                     max: 40.0,
-                    value: (_currentHandicap ?? playerData.playerHandicap).toDouble(),
+                    value: (_currentHandicap ?? document.get('handicap'))
+                        .toDouble(),
                     interval: 5,
                     onChanged: (val) =>
                         setState(() => _currentHandicap = val.round()),
@@ -79,8 +90,8 @@ class _PlayerDetailsFormState extends State<PlayerDetailsForm> {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        await DatabaseService(uid: user.uid)
-                            .updatePlayersData(user.uid,_currentName, _currentHandicap);
+                        await DatabaseService(uid: user!.uid).updatePlayersData(
+                            user.uid, _currentName, _currentHandicap);
                         Navigator.pop(context);
                       }
                     },
@@ -97,7 +108,7 @@ class _PlayerDetailsFormState extends State<PlayerDetailsForm> {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        await DatabaseService(uid: user.uid)
+                        await DatabaseService(uid: user!.uid)
                             .deletePlayersData();
                         Navigator.pop(context);
                       }
@@ -114,11 +125,9 @@ class _PlayerDetailsFormState extends State<PlayerDetailsForm> {
                 ],
               ),
             );
-          } else {
-            return Text(
-              'You cannot edit this player.'
-            );
-          }
-        });
+          }).toList(),
+        );
+      },
+    );
   }
 }

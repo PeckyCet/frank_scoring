@@ -93,7 +93,7 @@ class DatabaseService {
   //---COURSE DATA---
 
   //courses collection reference
-  final CollectionReference courseCollection =
+  final CollectionReference<Map<String, dynamic>> courseCollection =
       FirebaseFirestore.instance.collection('courses');
 
   //TODO: Adds a new course document to the courses collection
@@ -101,7 +101,12 @@ class DatabaseService {
   //courseData from snapshot
   Course _courseDataFromSnapshot(DocumentSnapshot snapshot) {
     return Course(
-        creatorUid: snapshot['creatorUid'], courseName: snapshot['courseName'], teeType: snapshot['teeType'], numberOfHoles: snapshot['numberOfHoles']);
+        creatorUid: snapshot['creatorUid'],
+        courseName: snapshot['courseName'],
+        teeType: snapshot['teeType'],
+        numberOfHoles: snapshot['numberOfHoles'],
+        docID: snapshot['docID']
+    );
   }
 
   //get course doc stream
@@ -116,7 +121,9 @@ class DatabaseService {
           creatorUid: doc.get('creatorUid') ?? '',
           courseName: doc.get('courseName') ?? '',
           numberOfHoles: doc.get('numberOfHoles') ?? 0,
-          teeType: doc.get('teeType') ?? '');
+          teeType: doc.get('teeType') ?? '',
+          docID: doc.get('docID') ?? ''
+      );
     }).toList();
   }
 
